@@ -37,11 +37,6 @@ resource "aws_instance" "rabbitmq" {
   vpc_security_group_ids = [aws_security_group.main.id]
   tags                   = merge(var.tags, { Name = "${var.name}-${var.env}" })
 
-  root_block_device {
-    encrypted  = true
-    kms_key_id = var.kms_arn
-  }
-
   user_data = base64encode(templatefile("${path.module}/userdata.sh", {
     rabbitmq_appuser_password = data.aws_ssm_parameter.rabbitmq_appuser_password.value
   }))
